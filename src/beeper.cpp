@@ -3,12 +3,17 @@
 #include <stdexcept>
 
 
-Beeper::Beeper(float freq, float duration)
+Beeper::Beeper(
+    float freq,
+    float duration,
+    float attack,
+    float sustain,
+    float decay)
     : m_freq(freq)
     , m_duration_left(duration)
-    , m_attack(1.f/30.f)
-    , m_sustain(1.f/30.f)
-    , m_decay(0.1f)
+    , m_attack(attack)
+    , m_sustain(sustain)
+    , m_decay(decay)
 {
     SDL_AudioSpec specs_desired;
     SDL_zero(specs_desired);
@@ -65,8 +70,8 @@ void Beeper::audio_cb(void * userdata, Uint8* stream, int len)
 {
     Beeper* b = (Beeper*)userdata;
 
-    const float max_amplitude = 50000.f;
-    const float sustain_amplitude = 35000.f;
+    const float max_amplitude     = 30000.f;
+    const float sustain_amplitude = 20000.f;
     const float sample_duration = 1.f / (float)b->m_specs.freq;
 
     SDL_LockAudioDevice(b->m_audio_dev);

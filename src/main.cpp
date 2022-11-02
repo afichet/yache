@@ -244,7 +244,7 @@ int main(int argc, char* argv[])
         // will respond to is 0x02. [4] Thus, setting the timer to a value of
         // 0x01 will have no audible effect.
         if (beep_cycles_length >= 0x02) {
-            beep_duration_sec = std::min(beep_duration_sec, beeper.minDuration());
+            beep_duration_sec = std::max(beep_duration_sec, beeper.minDuration());
             beeper.setDurationLeft(beep_duration_sec);
             beeper.setPaused(0);
         }

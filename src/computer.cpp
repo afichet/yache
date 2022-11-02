@@ -18,7 +18,6 @@ Computer::Computer(
     // Fist ensure the program can fit in ram
     const uint16_t ram_pgm_available = 0xE8F - 0x200 + 1;
 
-
     // Copy the program to ram
     if (program.size() > ram_pgm_available) {
         throw std::runtime_error("Progam is too big to fit in RAM");

@@ -5,7 +5,13 @@
 class Beeper
 {
 public:
-    Beeper(float freq = 440.f, float duration = 1.f);
+    Beeper(
+        float freq     = 440.f,
+        float duration = 1.f,
+        float attack   = 1.f/60.f,
+        float sustain  = 1.f/60.f,
+        float decay    = 1.f/60.f
+    );
 
     virtual ~Beeper();
 
