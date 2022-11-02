@@ -11,7 +11,7 @@ Computer::Computer(
     : m_wait_for_key_press(false)
     , m_delay_timer(0)
     , m_sound_timer(0)
-    , m_I_register(0) 
+    , m_I_register(0)
     , m_program_counter(0x200)
     , m_screen(screen_width / 8 * screen_height)
 {
@@ -102,7 +102,7 @@ void Computer::inst_00E0()
     #endif
 
     std::memset(&m_screen[0], 0, screen_width / 8 * screen_height);
-    
+
     m_program_counter += 2;
 }
 
@@ -132,7 +132,7 @@ void Computer::inst_1NNN(uint16_t addr)
 }
 
 
-// Execute subroutine starting at address NNN 
+// Execute subroutine starting at address NNN
 void Computer::inst_2NNN(uint16_t addr)
 {
     #ifdef PRINT_OPCODE
@@ -144,7 +144,7 @@ void Computer::inst_2NNN(uint16_t addr)
 }
 
 
-// Skip the following instruction if the value of register VX equals NN 
+// Skip the following instruction if the value of register VX equals NN
 void Computer::inst_3XNN(uint8_t reg_x, uint8_t value)
 {
     #ifdef PRINT_OPCODE
@@ -159,7 +159,7 @@ void Computer::inst_3XNN(uint8_t reg_x, uint8_t value)
 }
 
 
-// Skip the following instruction if the value of register VX is not equal to NN 
+// Skip the following instruction if the value of register VX is not equal to NN
 void Computer::inst_4XNN(uint8_t reg_x, uint8_t value)
 {
     #ifdef PRINT_OPCODE
@@ -190,20 +190,20 @@ void Computer::inst_5XY0(uint8_t reg_x, uint8_t reg_y)
 }
 
 
-// Store number NN in register VX 
+// Store number NN in register VX
 void Computer::inst_6XNN(uint8_t reg_x, uint8_t value)
 {
     #ifdef PRINT_OPCODE
     std::cout << "STR v" << std::hex << (int)(reg_x) << " " << (int)(value);
     #endif
-    
+
     m_registers[reg_x] = value;
 
     m_program_counter += 2;
 }
 
 
-// Add the value NN to register VX 
+// Add the value NN to register VX
 void Computer::inst_7XNN(uint8_t reg_x, uint8_t value)
 {
     #ifdef PRINT_OPCODE
@@ -216,7 +216,7 @@ void Computer::inst_7XNN(uint8_t reg_x, uint8_t value)
 }
 
 
-// Store the value of register VY in register VX 
+// Store the value of register VY in register VX
 void Computer::inst_8XY0(uint8_t reg_x, uint8_t reg_y)
 {
     #ifdef PRINT_OPCODE
@@ -254,7 +254,7 @@ void Computer::inst_8XY2(uint8_t reg_x, uint8_t reg_y)
 }
 
 
-// Set VX to VX XOR VY 
+// Set VX to VX XOR VY
 void Computer::inst_8XY3(uint8_t reg_x, uint8_t reg_y)
 {
     #ifdef PRINT_OPCODE
@@ -405,7 +405,7 @@ void Computer::inst_9XY0(uint8_t reg_x, uint8_t reg_y)
 }
 
 
-// Store memory address NNN in register I 
+// Store memory address NNN in register I
 void Computer::inst_ANNN(uint16_t addr)
 {
     #ifdef PRINT_OPCODE
@@ -429,7 +429,7 @@ void Computer::inst_BNNN(uint16_t addr)
 }
 
 
-// Set VX to a random number with a mask of NN 
+// Set VX to a random number with a mask of NN
 void Computer::inst_CXNN(uint8_t reg_x, uint8_t mask)
 {
     #ifdef PRINT_OPCODE
@@ -461,7 +461,7 @@ void Computer::inst_DXYN(uint8_t reg_x, uint8_t reg_y, uint8_t n_bytes)
 
     for (uint8_t y = start_y; y < start_y + n_bytes && y < screen_height; y++) {
         const uint8_t mem_val = m_memory[m_I_register + (y - start_y)];
-        
+
         for (uint8_t b = 0; b < 8; b++) {
             const uint8_t x_b = (start_x + b) / 8;
 
@@ -531,7 +531,7 @@ void Computer::inst_EXA1(uint8_t reg_x)
 }
 
 
-// Store the current value of the delay timer in register VX 
+// Store the current value of the delay timer in register VX
 void Computer::inst_FX07(uint8_t reg_x)
 {
     #ifdef PRINT_OPCODE
@@ -544,7 +544,7 @@ void Computer::inst_FX07(uint8_t reg_x)
 }
 
 
-// Wait for a keypress and store the result in register VX 
+// Wait for a keypress and store the result in register VX
 void Computer::inst_FX0A(uint8_t reg_x)
 {
     #ifdef PRINT_OPCODE
@@ -559,13 +559,13 @@ void Computer::inst_FX0A(uint8_t reg_x)
         m_program_counter += 2;
     } else {
         m_wait_for_key_press = true;
-        // We do not advance the program counter, 
+        // We do not advance the program counter,
         // the insctruction will be called again
     }
 }
 
 
-// Set the delay timer to the value of register VX 
+// Set the delay timer to the value of register VX
 void Computer::inst_FX15(uint8_t reg_x)
 {
     #ifdef PRINT_OPCODE
@@ -578,7 +578,7 @@ void Computer::inst_FX15(uint8_t reg_x)
 }
 
 
-// Set the sound timer to the value of register VX 
+// Set the sound timer to the value of register VX
 void Computer::inst_FX18(uint8_t reg_x)
 {
     #ifdef PRINT_OPCODE
@@ -591,7 +591,7 @@ void Computer::inst_FX18(uint8_t reg_x)
 }
 
 
-// Add the value stored in register VX to register I 
+// Add the value stored in register VX to register I
 void Computer::inst_FX1E(uint8_t reg_x)
 {
     #ifdef PRINT_OPCODE
@@ -605,7 +605,7 @@ void Computer::inst_FX1E(uint8_t reg_x)
 
 
 // Set I to the memory address of the sprite data corresponding to the
-// hexadecimal digit stored in register VX 
+// hexadecimal digit stored in register VX
 void Computer::inst_FX29(uint8_t reg_x)
 {
     #ifdef PRINT_OPCODE
@@ -652,7 +652,7 @@ void Computer::inst_FX55(uint8_t reg_x)
     // for (uint8_t reg = 0; reg <= reg_x; reg++) {
     //     m_memory[m_I_register + reg] = m_registers[reg];
     // }
-    
+
     std::memcpy(&m_memory[m_I_register], &m_registers[0], reg_x + 1);
 
     // Implementation dependent:
@@ -713,7 +713,7 @@ void Computer::exec(uint16_t instruction)
     }
     // 0NNN
     else if ((instruction & 0xF000) == 0x0000) {
-        // Execute machine language subroutine at address NNN 
+        // Execute machine language subroutine at address NNN
         inst_0NNN(nnn);
     }
     // 1NNN
@@ -723,26 +723,26 @@ void Computer::exec(uint16_t instruction)
     }
     // 2NNN
     else if ((instruction & 0xF000) == 0x2000) {
-        // Execute subroutine starting at address NNN 
+        // Execute subroutine starting at address NNN
         inst_2NNN(nnn);
     }
     // 3XNN
     else if ((instruction & 0xF000) == 0x3000) {
-        // Skip the following instruction if the value of register VX equals NN 
+        // Skip the following instruction if the value of register VX equals NN
         inst_3XNN(reg_x, nn);
     }
     // 4XNN
     else if ((instruction & 0xF000) == 0x4000) {
-        // Skip the following instruction if the value of register VX is not 
-        // equal to NN 
+        // Skip the following instruction if the value of register VX is not
+        // equal to NN
         inst_4XNN(reg_x, nn);
     }
     // 5XY0
     else if ((instruction & 0xF000) == 0x5000) {
         // Skip the following instruction if the value of register VX is equal
-        // to the value of register VY 
+        // to the value of register VY
         inst_5XY0(reg_x, reg_y);
-    } 
+    }
     // 6XNN
     else if ((instruction & 0xF000) == 0x6000) {
         // Store number NN in register VX
@@ -810,12 +810,12 @@ void Computer::exec(uint16_t instruction)
     }
     // 9XY0
     else if ((instruction & 0xF00F) == 0x9000) {
-        // Skip the following instruction if the value of register VX is not 
+        // Skip the following instruction if the value of register VX is not
         // equal to the value of register VY
         inst_9XY0(reg_x, reg_y);
     }
     // ANNN
-    else if ((instruction & 0xF000) == 0xA000) { 
+    else if ((instruction & 0xF000) == 0xA000) {
         // Store memory address NNN in register I
         inst_ANNN(nnn);
     }
@@ -831,10 +831,10 @@ void Computer::exec(uint16_t instruction)
     }
     // DXYN
     else if ((instruction & 0xF000) == 0xD000) {
-        // Draw a sprite at position VX, VY with N bytes of sprite data 
+        // Draw a sprite at position VX, VY with N bytes of sprite data
         // starting at the address stored in I
         // Set VF to 01 if any set pixels are changed to unset, and 00 otherwise
-        inst_DXYN(reg_x, reg_y, n);        
+        inst_DXYN(reg_x, reg_y, n);
     }
     // EX9E
     else if ((instruction & 0xF0FF) == 0xE09E) {

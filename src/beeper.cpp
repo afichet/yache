@@ -55,7 +55,7 @@ void Beeper::setDurationLeft(float duration)
 }
 
 
-float Beeper::minDuration() const 
+float Beeper::minDuration() const
 {
     return m_attack + m_sustain + m_decay;
 }
@@ -76,14 +76,14 @@ void Beeper::audio_cb(void * userdata, Uint8* stream, int len)
     for (int i = 0; i < len / 2; i++) {
         if (b->m_duration_left > 0.f) {
             const float t = (float)(i + b->m_samples_gen) / (float)(b->m_specs.freq);
-            
+
             float amplitude = 0.f;
 
             if (b->m_duration_left <= b->m_decay) {
                 // End of the note
                 const float a = b->m_duration_left / b->m_decay;
                 amplitude = a * sustain_amplitude;
-            } 
+            }
             else if (b->m_duration_played < b->m_attack) {
                 // Start of the note
                 const float a = b->m_duration_played / b->m_attack;
@@ -97,7 +97,7 @@ void Beeper::audio_cb(void * userdata, Uint8* stream, int len)
             else {
                 // Permanent mode
                 amplitude = sustain_amplitude;
-            } 
+            }
 
             samples[i] = amplitude * std::sin(2. * M_PI * t * b->m_freq);
 

@@ -28,18 +28,18 @@ void screen_to_sdl(
     for (int y = 0; y < height; y++) {
         for (int x = 0; x < width / 8; x++) {
             const int x_sdl = 8 * x;
-            
+
             // Get 8 px at a time
             uint8_t c = screen[y * width / 8 + x];
 
             uint8_t offset = 0b10000000;
-            
+
             for (int i = 0; i < 8; i++) {
                 sdl_screen[4 * (y * width_sdl + (8 * x + i)) + 0] = (c & offset) ? 0xFF: 0x00;
                 sdl_screen[4 * (y * width_sdl + (8 * x + i)) + 1] = (c & offset) ? 0xFF: 0x00;
                 sdl_screen[4 * (y * width_sdl + (8 * x + i)) + 2] = (c & offset) ? 0xFF: 0x00;
                 sdl_screen[4 * (y * width_sdl + (8 * x + i)) + 3] = 0xFF;
-                
+
                 offset = offset >> 1;
             }
         }
@@ -60,25 +60,25 @@ void screen_to_sdl(
 uint8_t keyBinding(SDL_Scancode code)
 {
     // !(1) @(2) #(3) $(4)  for US QWERTY
-    if (code == 30) { return 0x1; } 
+    if (code == 30) { return 0x1; }
     if (code == 31) { return 0x2; }
     if (code == 32) { return 0x3; }
     if (code == 33) { return 0xC; }
 
     // QWER                 for US QWERTY
-    if (code == 20) { return 0x4; } 
+    if (code == 20) { return 0x4; }
     if (code == 26) { return 0x5; }
     if (code == 8)  { return 0x6; }
     if (code == 21) { return 0xD; }
 
     // ASDF                 for US QWERTY
-    if (code == 4)  { return 0x7; } 
+    if (code == 4)  { return 0x7; }
     if (code == 22) { return 0x8; }
     if (code == 7)  { return 0x9; }
     if (code == 9)  { return 0xE; }
 
     // ZXCV                 for US QWERTY
-    if (code == 29) { return 0xA; } 
+    if (code == 29) { return 0xA; }
     if (code == 27) { return 0x0; }
     if (code == 6)  { return 0xB; }
     if (code == 25) { return 0xF; }
@@ -92,7 +92,7 @@ int main(int argc, char* argv[])
 {
     const uint32_t proc_speed_Hz = 300;
     const uint32_t tick_length_ms = (uint32_t)(1.f/(float)proc_speed_Hz * 1000.f);
-    
+
     if (argc < 2) {
         std::cout << "Usage:" << std::endl
                   << "------" << std::endl
@@ -116,7 +116,7 @@ int main(int argc, char* argv[])
 
     // Allocate enough memory to store the rom
     std::vector<uint8_t> rom(rom_size);
-    
+
     // Read rom content
     std::fread(rom.data(), rom_size, 1, f_rom);
     std::fclose(f_rom);
@@ -137,27 +137,27 @@ int main(int argc, char* argv[])
     int scale = 12;
 
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0) {
-        std::cerr << "Failed to initialize SDL: " 
+        std::cerr << "Failed to initialize SDL: "
                   << SDL_GetError() << std::endl;
         return -1;
     }
 
-    window = SDL_CreateWindow("CHIP8", 
+    window = SDL_CreateWindow("CHIP8",
         SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
         scale * screen_w,
-        scale * screen_h, 
+        scale * screen_h,
         SDL_WINDOW_RESIZABLE
     );
 
     if (!window) {
-        std::cerr << "Failed to create a window: " 
+        std::cerr << "Failed to create a window: "
                   << SDL_GetError() << std::endl;
         SDL_Quit();
         return -1;
     }
 
     renderer = SDL_CreateRenderer(
-        window, -1, 
+        window, -1,
         SDL_RENDERER_ACCELERATED
     );
 
@@ -176,7 +176,7 @@ int main(int argc, char* argv[])
     );
 
     if (!texture) {
-        std::cerr << "Failed to create a texture: " 
+        std::cerr << "Failed to create a texture: "
                   << SDL_GetError() << std::endl;
         SDL_Quit();
         return -1;
@@ -228,20 +228,20 @@ int main(int argc, char* argv[])
         );
 
         SDL_UpdateTexture(
-            texture, NULL, 
-            screen_texture.data(), 
+            texture, NULL,
+            screen_texture.data(),
             screen_w * sizeof(uint32_t)
         );
-        
+
         SDL_RenderCopy(renderer, texture, NULL, NULL);
         SDL_RenderPresent(renderer);
 
         // Sound management
         int beep_cycles_length = computer.soundTimer();
         float beep_duration_sec = (beep_cycles_length * tick_length_ms) / 1000.;
-        
-        // As noted in the COSMAC VIP manual, the minimum value that the timer 
-        // will respond to is 0x02. [4] Thus, setting the timer to a value of 
+
+        // As noted in the COSMAC VIP manual, the minimum value that the timer
+        // will respond to is 0x02. [4] Thus, setting the timer to a value of
         // 0x01 will have no audible effect.
         if (beep_cycles_length >= 0x02) {
             beep_duration_sec = std::min(beep_duration_sec, beeper.minDuration());

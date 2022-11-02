@@ -68,7 +68,7 @@ protected:
 
 protected:
     std::array<uint8_t, 16> m_registers;
-    
+
     bool m_wait_for_key_press;
     uint8_t m_last_key_pressed;
 
