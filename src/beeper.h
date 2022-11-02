@@ -15,9 +15,10 @@ public:
 
     float minDuration() const;
 
+protected:
     static void audio_cb(void * userdata, Uint8* stream, int len);
 
-private:
+protected:
     float m_freq;
 
     float m_duration_played;
