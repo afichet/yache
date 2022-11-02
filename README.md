@@ -55,12 +55,12 @@ Some instructions vary depending on the CHIP-8 implementation. You can change so
 #define ALT_STR_LD
 ```
 
-`ALT_SHIFT` change the behaviour of instructions `8XY6` and `8XYE`.
+`ALT_SHIFT` changes the behaviour of instructions `8XY6` and `8XYE`.
 
 - When enabled, the shift is applied to `vx` register and saved in `vx`. `vy` is not used.
 - When disabled, the shift is applied to `vy` register and saved in `vx`.
 
-`ALT_STR_LD` change the behaviour of instructions `FX55` and `FX65`.
+`ALT_STR_LD` changes the behaviour of instructions `FX55` and `FX65`.
 
 - When enabled, `I` register is incremented by `X + 1` after the execution.
 - When disabled, `I` register remains unchanged after the execution.
