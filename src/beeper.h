@@ -21,6 +21,8 @@ public:
 
     float minDuration() const;
 
+    float durationLeft() const { return m_duration_left; }
+
 protected:
     static void audio_cb(void * userdata, Uint8* stream, int len);
 

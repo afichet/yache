@@ -189,6 +189,15 @@ int main(int argc, char* argv[])
 
     Beeper beeper(550., 0.);
 
+    // beeper.setDurationLeft(1.);
+    // beeper.setPaused(0);
+
+    // SDL_Delay(2000);
+    // beeper.setDurationLeft(2.f * beeper.minDuration());
+    // SDL_Delay(2000);
+    // beeper.setDurationLeft(1.);
+    // SDL_Delay(2000);
+
     while (!quit) {
         // We keep track of the host computation loop duration
         ticks_prev = SDL_GetTicks64();
@@ -245,8 +254,12 @@ int main(int argc, char* argv[])
         // 0x01 will have no audible effect.
         if (beep_cycles_length >= 0x02) {
             beep_duration_sec = std::max(beep_duration_sec, beeper.minDuration());
-            beeper.setDurationLeft(beep_duration_sec);
-            beeper.setPaused(0);
+            // FIXME: This mitigate popping but this is not optimal:
+            // The beeper class shall handle such case to dynamically change the
+            // amplitude max & sustain
+            if (beep_duration_sec > beeper.durationLeft()) {
+                beeper.setDurationLeft(beep_duration_sec);
+            }
         }
 
         const uint64_t ticks_now = SDL_GetTicks64();

@@ -57,6 +57,10 @@ void Beeper::setPaused(int is_paused)
 void Beeper::setDurationLeft(float duration)
 {
     m_duration_left = duration;
+
+    if (m_duration_left > 0.f) {
+        setPaused(0);
+    }
 }
 
 
@@ -71,7 +75,7 @@ void Beeper::audio_cb(void * userdata, Uint8* stream, int len)
     Beeper* b = (Beeper*)userdata;
 
     const float max_amplitude     = 30000.f;
-    const float sustain_amplitude = 20000.f;
+    const float sustain_amplitude = 10000.f;
     const float sample_duration = 1.f / (float)b->m_specs.freq;
 
     SDL_LockAudioDevice(b->m_audio_dev);
