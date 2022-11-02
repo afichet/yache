@@ -6,6 +6,9 @@ This project was made for fun. There is plenty of better CHIP-8 implementations 
 
 For more information about CHIP-8, visit [Matthew Mikolay CHIP-8 Wiki](https://github.com/mattmikolay/chip-8/wiki).
 
+Running Brix by Andreas Gustafsson:
+![Screenshot](https://user-images.githubusercontent.com/7930348/199541437-028be0c3-443e-4442-9f3e-ba56064d89d9.png)
+
 ## Compilation
 
 The only dependency you need is SDL2.
