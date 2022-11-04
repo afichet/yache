@@ -184,23 +184,11 @@ int main(int argc, char* argv[])
 
     std::vector<uint8_t> screen_texture(screen_w * screen_h * 4);
 
-    uint64_t ticks_prev;
-    uint8_t key_down, key_up;
-
     Beeper beeper(550., 0.);
 
-    // beeper.setDurationLeft(1.);
-    // beeper.setPaused(0);
-
-    // SDL_Delay(2000);
-    // beeper.setDurationLeft(2.f * beeper.minDuration());
-    // SDL_Delay(2000);
-    // beeper.setDurationLeft(1.);
-    // SDL_Delay(2000);
-
     while (!quit) {
-        // We keep track of the host computation loop duration
-        ticks_prev = SDL_GetTicks64();
+        // We keep track of the length of the execution loop
+        const uint64_t ticks_start = SDL_GetTicks64();
 
         while (SDL_PollEvent(&event)) {
             switch (event.type)
@@ -208,18 +196,20 @@ int main(int argc, char* argv[])
                 case SDL_QUIT:
                     quit = true;
                     break;
-                case SDL_KEYDOWN:
-                    key_down = keyBinding(event.key.keysym.scancode);
+                case SDL_KEYDOWN: {
+                    uint8_t key_down = keyBinding(event.key.keysym.scancode);
                     if (key_down != 255) {
                         computer.keyPress(key_down);
                     }
                     break;
-                case SDL_KEYUP:
-                    key_up = keyBinding(event.key.keysym.scancode);
-                    if (key_down != 255) {
+                }
+                case SDL_KEYUP: {
+                    uint8_t key_up = keyBinding(event.key.keysym.scancode);
+                    if (key_up != 255) {
                         computer.keyRelease(key_up);
                     }
                     break;
+                }
                 default:
                     break;
             }
@@ -262,8 +252,17 @@ int main(int argc, char* argv[])
             }
         }
 
+        // Delay the execution and offset the delay to (mostly) account for 
+        // the interpreter overhead. This could be slighty improved.
         const uint64_t ticks_now = SDL_GetTicks64();
-        SDL_Delay(tick_length_ms - (ticks_prev - ticks_now));
+
+        // We have to be carefull here, we are dealing with unsigned values!
+        if ((ticks_now - ticks_start) > tick_length_ms) {
+            // We do not wait, uncomment to visualise the cycle exceeding real time performance
+            // std::cerr << "Cycle was not performed in real time!" << std::endl;
+        } else {
+            SDL_Delay(tick_length_ms - (ticks_now - ticks_start));
+        }
     }
 
     SDL_DestroyTexture(texture);
