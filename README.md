@@ -68,4 +68,4 @@ Some instructions vary depending on the CHIP-8 implementation. You can change so
 - When enabled, `I` register is incremented by `X + 1` after the execution.
 - When disabled, `I` register remains unchanged after the execution.
 
-You may want to change the state of the two define depending on the ROM you want to run. 
+You may want to change the state of the two defines depending on the ROM you want to run. 
